@@ -17,13 +17,13 @@ export default function AdminLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://themepark-backend.onrender.com/admin", values, {
+      .post("https://themepark-backend.onrender.com//admin", values, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth) {
           axios
-            .get("https://themepark-backend.onrender.com/admin/verify", {
+            .get("https://themepark-backend.onrender.com//admin/verify", {
               withCredentials: true,
             })
             .then((res) => {

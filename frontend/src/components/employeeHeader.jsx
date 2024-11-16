@@ -7,7 +7,7 @@ export default function EmployeeHeader() {
   const { setAuth, setRole, welcomeMessage, setWelcomeMessage } = useAuth();
   const handleLogout = () => {
     axios
-      .post("https://themepark-backend.onrender.com/admin/logout", [], {
+      .post("https://themepark-backend.onrender.com//admin/logout", [], {
         withCredentials: true,
       })
       .then((res) => {

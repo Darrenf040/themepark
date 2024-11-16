@@ -46,7 +46,7 @@ const ParkStatusForm = () => {
     }
     try {
       const response = await axios.post(
-        "https://themepark-backend.onrender.com/parkstatus/create",
+        "https://themepark-backend.onrender.com//parkstatus/create",
         ParkStatusData
       );
       if (response.data.message) {
@@ -60,7 +60,7 @@ const ParkStatusForm = () => {
 
   const getParkStatus = () => {
     axios
-      .get("https://themepark-backend.onrender.com/parkstatus/read")
+      .get("https://themepark-backend.onrender.com//parkstatus/read")
       .then((res) => setParkStatusList(res.data.result))
       .catch((err) => console.error(err));
   };
@@ -68,7 +68,7 @@ const ParkStatusForm = () => {
   const getParkStatusData = (parkStatusID) => {
     axios
       .get(
-        `https://themepark-backend.onrender.com/parkstatus/read/${parkStatusID}`
+        `https://themepark-backend.onrender.com//parkstatus/read/${parkStatusID}`
       )
       .then((res) => {
         setEditRow(res.data.result);
@@ -153,7 +153,7 @@ const ParkStatusForm = () => {
     };
     axios
       .put(
-        `https://themepark-backend.onrender.com/parkstatus/update`,
+        `https://themepark-backend.onrender.com//parkstatus/update`,
         updatedData
       )
       .then((res) => alert(res.data))
@@ -327,7 +327,7 @@ export default ParkStatusForm;
 
 /*const getParkHistory = () => {
     axios
-      .get("https://themepark-backend.onrender.com/parkstatus/readhistory")
+      .get("https://themepark-backend.onrender.com//parkstatus/readhistory")
       .then((res) => setParkHistoryList(res.data.result))
       .catch((err) => console.error(err));
   };*/

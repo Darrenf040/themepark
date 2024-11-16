@@ -46,7 +46,7 @@ const ShopForm = () => {
     try {
       // Replace with your backend API endpoint for shop/restaurant creation
       const response = await axios.post(
-        "https://themepark-backend.onrender.com/shops/create",
+        "https://themepark-backend.onrender.com//shops/create",
         formData
       );
       alert(`Ticket created successfully:`);

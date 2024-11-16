@@ -10,7 +10,7 @@ export default function Dining() {
   const [restaurantList, setRestaurantList] = useState([]);
   const getRestaurants = () => {
     axios
-      .get("https://themepark-backend.onrender.com/shops/readRestaurants")
+      .get("https://themepark-backend.onrender.com//shops/readRestaurants")
       .then((res) => setRestaurantList(res.data.result))
       .catch((err) => console.error(err));
   };
