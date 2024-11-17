@@ -6,7 +6,7 @@ import "./DataEntryForm.css";
 import "./DataForm.css";
 import EmployeeHeader from "../components/employeeHeader";
 
-const API_URL = "https://themepark-backend.onrender.com/events";
+const API_URL = "https://gleaming-lokum-158537.netlify.app/events";
 
 function SpecialEventForm() {
     const [events, setEvents] = useState([]);
@@ -53,9 +53,6 @@ function SpecialEventForm() {
     };
 
     const handleEditEvent = (event) => {
-        if(event === undefined) {
-            return;
-        }
       // Format the date values properly for datetime-local input
       const formattedStartDate = formatForDateLocal(event.startDate);
       const formattedEndDate = formatForDateLocal(event.endDate);
@@ -127,9 +124,9 @@ function SpecialEventForm() {
                     </tr>
                 </thead>
                 <tbody>
-                    {events && events.map((event, key) => {
-                        return(
-                            <tr key={key}> 
+                    {events.length > 0 ? (
+                        events.map((event) => (
+                            <tr key={event.id}>
                                 <td>{event.eventName}</td>
                                 <td>{event.eventType}</td>
                                 <td>{formatDate(event.startDate)}</td>
@@ -154,8 +151,12 @@ function SpecialEventForm() {
                                     </button>
                                 </td>
                             </tr>
-                                );
-                            })}
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="5">No events found</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
 
