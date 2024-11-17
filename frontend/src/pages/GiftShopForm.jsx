@@ -76,7 +76,7 @@ const GiftShopForm = () => {
     const handleDelete = async (shopID) => {
         if (window.confirm("Are you sure you want to delete this shop?")) {
             try {
-                await axios.delete(`https://themepark-backend.onrender.com/shops/${shopID}`);
+                await axios.put(`https://themepark-backend.onrender.com/shops/${shopID}`);
                 fetchShops();
             } catch (error) {
                 console.error("Error deleting shop:", error);
