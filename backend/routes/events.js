@@ -22,7 +22,7 @@ eventsRoute.use(express.json());
 eventsRoute.use("/images", express.static(path.join(__dirname, "public/images")));
 
 eventsRoute.get("/read", (req, res) => {
-  const sql = "SELECT * FROM specialevents WHERE startDate >= CURRENT_DATE ORDER BY startDate";
+  const sql = "SELECT * FROM specialevents WHERE deleteStatus = 0 and startDate >= CURRENT_DATE ORDER BY startDate";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -48,8 +48,8 @@ eventsRoute.post('/create', (req, res) => {
 
   // Define SQL query for inserting a special event
   const query = `
-    INSERT INTO specialevents (eventName, eventType, startDate, endDate)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO specialevents (eventName, eventType, startDate, endDate, deleteStatus)
+    VALUES (?, ?, ?, ?, 0)
   `;
 
   // Execute the query with the provided form data
@@ -70,7 +70,7 @@ eventsRoute.post('/create', (req, res) => {
 });
 
 eventsRoute.delete('/:id', (req, res) => {
-  db.query('DELETE FROM SpecialEvents WHERE eventID = ?', [req.params.id], (err) => {
+  db.query('update SpecialEvents set deleteStatus = 1 WHERE eventID = ?', [req.params.id], (err) => {
       if (err) throw err;
   });
 });
@@ -91,7 +91,7 @@ eventsRoute.get("/upcoming-events", (req, res) => {
   const query = `
       SELECT eventName, eventType, startDate, endDate
       FROM SpecialEvents
-      WHERE startDate > NOW()
+      WHERE deleteStatus = 0 and startDate > NOW()
       ORDER BY startDate ASC
       LIMIT 5
   `;
