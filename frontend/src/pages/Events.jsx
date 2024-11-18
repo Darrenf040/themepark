@@ -9,7 +9,7 @@ export default function Events() {
   const [eventList, setEventList] = useState([]);
   const getEvents = () => {
     axios
-      .get("https://gleaming-lokum-158537.netlify.app/events/read")
+      .get("http://localhost:3000events/read")
       .then((res) => setEventList(res.data.result))
       .catch((err) => console.error(err));
   };

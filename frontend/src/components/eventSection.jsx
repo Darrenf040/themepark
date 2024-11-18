@@ -11,7 +11,7 @@ export default function EventSection({
     <section>
       <div
         className="event-container"
-        style={{ backgroundImage: `url(https://gleaming-lokum-158537.netlify.app/images/${eventImage})` }}
+        style={{ backgroundImage: `url(http://localhost:3000images/${eventImage})` }}
       >
         <h1>{eventName}</h1>
         <p><span>{`Start Date: ${eventStart}`}</span></p>

@@ -50,7 +50,7 @@ const TicketForm = () => {
     try {
       // Send POST request to the server API
       const response = await axios.post(
-        "https://gleaming-lokum-158537.netlify.app/tickets/create",
+        "http://localhost:3000tickets/create",
         ticketData
       );
       alert(`Ticket created with ID: ${response.data.ticketID}`);

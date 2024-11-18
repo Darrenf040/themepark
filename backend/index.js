@@ -29,7 +29,7 @@ const storage = multer.diskStorage({
 app.use(
   cors({
     credentials: true,
-    origin: "https://gleaming-lokum-158537.netlify.app",
+    origin: "http://localhost:5173",
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
 );

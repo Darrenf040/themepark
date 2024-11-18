@@ -4,7 +4,7 @@ import axios from "axios";
 import "./DataForm.css";
 import EmployeeHeader from "../components/employeeHeader";
 
-const API_URL = "https://gleaming-lokum-158537.netlify.app/rides";
+const API_URL = "http://localhost:3000rides";
 
 const RidesForm = () => {
     const [rides, setRides] = useState([]);
@@ -14,7 +14,7 @@ const RidesForm = () => {
 
     const fetchEmployees = async () => {
       try {
-          const response = await axios.get("https://gleaming-lokum-158537.netlify.app/employee/read");
+          const response = await axios.get("http://localhost:3000employee/read");
           setEmployees(response.data.result);
       } catch (error) {
           console.error("Error fetching employees:", error);

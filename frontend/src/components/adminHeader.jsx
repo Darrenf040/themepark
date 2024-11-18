@@ -8,7 +8,7 @@ export default function AdminHeader() {
 
   const handleLogout = () => {
     axios
-      .post("https://gleaming-lokum-158537.netlify.app/admin/logout", [], {
+      .post("http://localhost:3000admin/logout", [], {
         withCredentials: true,
       })
       .then((res) => {

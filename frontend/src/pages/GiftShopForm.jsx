@@ -26,7 +26,7 @@ const GiftShopForm = () => {
 
     const fetchShops = async () => {
         try {
-            const response = await axios.get("https://gleaming-lokum-158537.netlify.app/shops/read");
+            const response = await axios.get("http://localhost:3000shops/read");
             setShops(response.data.result);
         } catch (error) {
             console.error("Error fetching shops:", error);
@@ -62,9 +62,9 @@ const GiftShopForm = () => {
         e.preventDefault();
         try {
             if (isEditMode) {
-                await axios.put(`https://gleaming-lokum-158537.netlify.app/shops/${formData.shopID}`, formData);
+                await axios.put(`http://localhost:3000shops/${formData.shopID}`, formData);
             } else {
-                await axios.post("https://gleaming-lokum-158537.netlify.app/shops", formData);
+                await axios.post("http://localhost:3000shops", formData);
             }
             fetchShops();
             closeModal();
@@ -76,7 +76,7 @@ const GiftShopForm = () => {
     const handleDelete = async (shopID) => {
         if (window.confirm("Are you sure you want to delete this shop?")) {
             try {
-                await axios.delete(`https://gleaming-lokum-158537.netlify.app/shops/${shopID}`);
+                await axios.delete(`http://localhost:3000shops/${shopID}`);
                 fetchShops();
             } catch (error) {
                 console.error("Error deleting shop:", error);

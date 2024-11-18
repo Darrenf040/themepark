@@ -7,7 +7,7 @@ export default function EmployeeHeader() {
   const { setAuth, setRole, welcomeMessage, setWelcomeMessage } = useAuth();
   const handleLogout = () => {
     axios
-      .post("https://gleaming-lokum-158537.netlify.app/admin/logout", [], {
+      .post("http://localhost:3000admin/logout", [], {
         withCredentials: true,
       })
       .then((res) => {

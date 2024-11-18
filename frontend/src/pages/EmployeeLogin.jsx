@@ -15,13 +15,13 @@ export default function EmployeeLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://gleaming-lokum-158537.netlify.app/employees/auth", values, {
+      .post("http://localhost:3000employees/auth", values, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth) {
           axios
-            .get("https://gleaming-lokum-158537.netlify.app/employees/verify", {
+            .get("http://localhost:3000employees/verify", {
               withCredentials: true,
             })
             .then((res) => {

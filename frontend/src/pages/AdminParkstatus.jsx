@@ -46,7 +46,7 @@ const ParkStatusForm = () => {
     }
     try {
       const response = await axios.post(
-        "https://gleaming-lokum-158537.netlify.app/parkstatus/create",
+        "http://localhost:3000parkstatus/create",
         ParkStatusData
       );
       if (response.data.message) {
@@ -60,7 +60,7 @@ const ParkStatusForm = () => {
 
   const getParkStatus = () => {
     axios
-      .get("https://gleaming-lokum-158537.netlify.app/parkstatus/read")
+      .get("http://localhost:3000parkstatus/read")
       .then((res) => setParkStatusList(res.data.result))
       .catch((err) => console.error(err));
   };
@@ -68,7 +68,7 @@ const ParkStatusForm = () => {
   const getParkStatusData = (parkStatusID) => {
     axios
       .get(
-        `https://gleaming-lokum-158537.netlify.app/parkstatus/read/${parkStatusID}`
+        `http://localhost:3000parkstatus/read/${parkStatusID}`
       )
       .then((res) => {
         setEditRow(res.data.result);
@@ -154,7 +154,7 @@ const ParkStatusForm = () => {
     };
     axios
       .put(
-        `https://gleaming-lokum-158537.netlify.app/parkstatus/update`,
+        `http://localhost:3000parkstatus/update`,
         updatedData
       )
       .then((res) => alert(res.data))
@@ -328,7 +328,7 @@ export default ParkStatusForm;
 
 /*const getParkHistory = () => {
     axios
-      .get("https://gleaming-lokum-158537.netlify.app/parkstatus/readhistory")
+      .get("http://localhost:3000parkstatus/readhistory")
       .then((res) => setParkHistoryList(res.data.result))
       .catch((err) => console.error(err));
   };*/

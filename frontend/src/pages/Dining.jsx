@@ -10,7 +10,7 @@ export default function Dining() {
   const [restaurantList, setRestaurantList] = useState([]);
   const getRestaurants = () => {
     axios
-      .get("https://gleaming-lokum-158537.netlify.app/shops/readRestaurants")
+      .get("http://localhost:3000shops/readRestaurants")
       .then((res) => setRestaurantList(res.data.result))
       .catch((err) => console.error(err));
   };

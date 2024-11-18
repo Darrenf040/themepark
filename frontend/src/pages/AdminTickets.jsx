@@ -12,7 +12,7 @@ export default function AdminTickets() {
   const [parkDayFilter, setParkDayFilter] = useState({});
   const getTickets = () => {
     axios
-      .get("https://gleaming-lokum-158537.netlify.app/adminTickets/retrieveAll")
+      .get("http://localhost:3000adminTickets/retrieveAll")
       .then((res) => setTicketList(res.data.Result))
       .catch((err) => alert(err));
   };
@@ -25,7 +25,7 @@ export default function AdminTickets() {
     console.log(customerTicketData);
     axios
       .post(
-        "https://gleaming-lokum-158537.netlify.app/adminTickets/customer",
+        "http://localhost:3000adminTickets/customer",
         customerTicketData
       )
       .then((res) => console.log(res.data))
@@ -33,7 +33,7 @@ export default function AdminTickets() {
   };
   const getTicketAvailibility = () => {
     axios
-      .get("https://gleaming-lokum-158537.netlify.app/adminTickets/availibility", {
+      .get("http://localhost:3000adminTickets/availibility", {
         params: parkDayFilter,
       })
       .then((res) => setTicketAvailibility(res.data.Response))
@@ -41,7 +41,7 @@ export default function AdminTickets() {
   };
   const getVisitDays = () => {
     axios
-      .get("https://gleaming-lokum-158537.netlify.app/adminTickets/days")
+      .get("http://localhost:3000adminTickets/days")
       .then((res) => setParkDays(res.data.Response))
       .catch((err) => alert(err));
   };
@@ -49,7 +49,7 @@ export default function AdminTickets() {
     e.preventDefault();
     axios
       .post(
-        "https://gleaming-lokum-158537.netlify.app/adminTickets/filterCustomer",
+        "http://localhost:3000adminTickets/filterCustomer",
         customerSearchInfo
       )
       .then((res) => {

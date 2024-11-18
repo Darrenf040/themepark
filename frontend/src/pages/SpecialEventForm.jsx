@@ -6,7 +6,7 @@ import "./DataEntryForm.css";
 import "./DataForm.css";
 import EmployeeHeader from "../components/employeeHeader";
 
-const API_URL = "https://gleaming-lokum-158537.netlify.app/events";
+const API_URL = "http://localhost:3000events";
 
 function SpecialEventForm() {
     const [events, setEvents] = useState([]);

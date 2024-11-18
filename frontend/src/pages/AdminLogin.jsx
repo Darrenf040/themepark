@@ -17,13 +17,13 @@ export default function AdminLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://gleaming-lokum-158537.netlify.app/admin", values, {
+      .post("http://localhost:3000admin", values, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth) {
           axios
-            .get("https://gleaming-lokum-158537.netlify.app/admin/verify", {
+            .get("http://localhost:3000admin/verify", {
               withCredentials: true,
             })
             .then((res) => {
