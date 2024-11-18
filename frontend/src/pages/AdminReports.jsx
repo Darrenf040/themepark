@@ -20,7 +20,7 @@ const  postmMintenance =  (e) => {
    setRideMaint([{...rideMaint, maintenanceOpenDate: new Date(filterDate.startDate).toISOString().split('T')[0], // YYYY-MM-DD
     maintenanceCloseDate: new Date(filterDate.endDate).toISOString().split('T')[0],     // YYYY-MM-DD
   }]);
-  axios.post("https://themepark-backend.onrender.com/maintenance", filterDate)
+  axios.post("https://themepark-backend.onrender.com/reports/maintenance", filterDate)
   .then(res =>{
     setRideMaint(res.data.Result)
   })
@@ -32,14 +32,14 @@ const  postmMintenance =  (e) => {
 // const  transaction =  (e) => {
 
 //   e.preventDefault();
-//   axios.post("https://themepark-backend.onrender.com/shop-transactions",shopData)
+//   axios.post("https://themepark-backend.onrender.com/reports/shop-transactions",shopData)
 //   .then(res => setFilterShops(res.data.Result))
 //   .catch(err => alert(err))
 // }
 const  ticketSales =  (e) => {
 
   e.preventDefault();
-  axios.post("https://themepark-backend.onrender.com/ticket-sales",ticketDate)
+  axios.post("https://themepark-backend.onrender.com/reports/ticket-sales",ticketDate)
   .then(res => setFiltertickets(res.data.Result))
   .catch(err => alert(err))
 }
@@ -47,7 +47,7 @@ const  ticketSales =  (e) => {
 const  refund =  (e) => {
 
   e.preventDefault();
-  axios.post("https://themepark-backend.onrender.com/refund-info", refundDate)
+  axios.post("https://themepark-backend.onrender.com/reports/refund-info", refundDate)
   .then(res =>{setFilterrefund(res.data.Result);
   const totalSales = res.data.Result.reduce((acc, ticket) => {
     return acc + (ticket.totalTicketPrice || 0); // Ensure to handle missing or null values

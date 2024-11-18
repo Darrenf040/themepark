@@ -20,17 +20,16 @@ export default function GiftShops() {
   return (
     <div>
       <Header />
-      <div class="parkTitle">
+      <div className="parkTitle">
         <h1>Gift Shops</h1>
         <p>
           Bringing home the perfect souvenir from a day at the park can make
-          your memories last a lifetime. Whether it’s a cool T-Shirt or hat in
+          your memories last a lifetime. Whether its a cool T-Shirt or hat in
           the latest style, an adorable stuffed animal, or the perfect photo of
-          your crew zooming down the rails of a giant roller coaster, you’ll
-          only find it at Theme Park. The park’s non-stop smiles and fun are
-          reflected in a broad range of exceptional products that you’ll have as
-          much fun collecting and wearing as you do riding the colossal roller
-          coasters.
+          your crew zooming down the rails of a giant roller coaster, youll only
+          find it at Theme Park. The parks non-stop smiles and fun are reflected
+          in a broad range of exceptional products that youll have as much fun
+          collecting and wearing as you do riding the colossal roller coasters.
         </p>
       </div>
       {shopList &&

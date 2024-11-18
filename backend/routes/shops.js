@@ -7,7 +7,7 @@ shopsRoute.use(cors());
 shopsRoute.use(express.json());
 
 shopsRoute.get("/read", (req, res) => {
-  const sql = "SELECT * FROM shop";
+  const sql = "SELECT * FROM shop where deleteStatus = 0";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -17,7 +17,7 @@ shopsRoute.get("/read", (req, res) => {
 });
 
 shopsRoute.get("/readRestaurants", (req, res) => {
-  const sql = "SELECT * FROM shop WHERE shopType = 0";
+  const sql = "SELECT * FROM shop WHERE shopType = 0 and deleteStatus = 0";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -27,7 +27,7 @@ shopsRoute.get("/readRestaurants", (req, res) => {
 });
 
 shopsRoute.get("/readGiftShops", (req, res) => {
-  const sql = "SELECT * FROM shop WHERE shopType = 1";
+  const sql = "SELECT * FROM shop WHERE shopType = 1 and deleteStatus = 0";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -37,33 +37,9 @@ shopsRoute.get("/readGiftShops", (req, res) => {
 });
 
 shopsRoute.post("/create", (req, res) => {
-  const { shopName, location, shopType, products } = req.body;
-
-  db.query(
-    "INSERT INTO shop (shopName, Location, shopType) VALUES ( ?, ?, ?)",
-    [shopName, location, shopType],
-    (err, result) => {
-      if (err) return res.status(500).json({ error: err.message });
-
-      const shopID = result.insertId;
-
-      const productEntries = products.map((p) => [shopID, p.name, p.price]);
-      db.query(
-        "INSERT INTO products (shopID, productName, price) VALUES ?",
-        [productEntries],
-        (err) => {
-          if (err) return res.status(500).json({ error: err.message });
-          res.json({ message: "Gift shop and products added successfully!" });
-        }
-      );
-    }
-  );
-});
-
-shopsRoute.post("/shops", (req, res) => {
   const { shopName, location, shopType, shopDesc, imageFileName } = req.body;
-  const query = "INSERT INTO shops (shopName, location, shopType, shopDesc, imageFileName) VALUES (?, ?, ?, ?, ?)";
-  db.query(query, [shopName, location, shopType, shopDesc, imageFileName], (err, result) => {
+  const query = "INSERT INTO shop (shopName, location, shopType, shopDesc, deleteStatus, imageFileName) VALUES (?, ?, ?, ?, 0, 'under-construction.webp')";
+  db.query(query, [shopName, location, shopType, shopDesc], (err, result) => {
       if (err) {
           console.error(err);
           return res.status(500).send("Failed to create shop");
@@ -74,12 +50,12 @@ shopsRoute.post("/shops", (req, res) => {
 
 shopsRoute.put("/:shopID", (req, res) => {
   const { shopID } = req.params;
-  const { shopName, location, shopType, shopDesc, imageFileName } = req.body;
+  const { shopName, location, shopType, shopDesc } = req.body;
   const query = `
-      UPDATE shops 
-      SET shopName = ?, location = ?, shopType = ?, shopDesc = ?, imageFileName = ? 
+      UPDATE shop 
+      SET shopName = ?, location = ?, shopType = ?, shopDesc = ?
       WHERE shopID = ?`;
-  db.query(query, [shopName, location, shopType, shopDesc, imageFileName, shopID], (err, result) => {
+  db.query(query, [shopName, location, shopType, shopDesc, shopID], (err, result) => {
       if (err) {
           console.error(err);
           return res.status(500).send("Failed to update shop");
@@ -90,7 +66,7 @@ shopsRoute.put("/:shopID", (req, res) => {
 
 shopsRoute.delete("/:shopID", (req, res) => {
   const { shopID } = req.params;
-  const query = "DELETE FROM shops WHERE shopID = ?";
+  const query = "update shop set deleteStatus = 1 WHERE shopID = ?";
   db.query(query, [shopID], (err, result) => {
       if (err) {
           console.error(err);

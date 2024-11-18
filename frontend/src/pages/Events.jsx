@@ -20,7 +20,12 @@ export default function Events() {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-CA");
+    date.setDate(date.getDate() + 1);
+    return date.toLocaleDateString("en-TX", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
   };
 
   return (

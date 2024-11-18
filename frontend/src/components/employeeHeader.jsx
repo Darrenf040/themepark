@@ -26,7 +26,7 @@ export default function EmployeeHeader() {
           <h1>Themepark</h1>
         </Link>
         <div className="employee-tabs">
-	  <Link to={"/login/employees/home"}>Home</Link>
+          <Link to={"/login/employees/home"}>Home</Link>
           <Link to={"/login/employees/shop"}>Shop</Link>
           <Link to={"/login/employees/events"}>Events</Link>
           <Link to={"/login/employees/ride"}>Rides</Link>

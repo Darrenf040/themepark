@@ -5,7 +5,6 @@ export default function DiningCard({
   diningImage,
   diningName,
   diningLocation,
-  diningProducts,
   diningOverview,
 }) {
   return (
@@ -17,7 +16,6 @@ export default function DiningCard({
         <h1>{diningName}</h1>
         <p>{`Location: ${diningLocation}`}</p>
         <p>{diningOverview}</p>
-        <p>{`Products: ${diningProducts}`}</p>
       </div>
     </div>
   );
@@ -26,6 +24,5 @@ DiningCard.propTypes = {
   diningImage: PropTypes.string.isRequired,
   diningName: PropTypes.string,
   diningLocation: PropTypes.string,
-  diningProducts: PropTypes.string,
   diningOverview: PropTypes.string,
 };

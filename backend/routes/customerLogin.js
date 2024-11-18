@@ -12,24 +12,25 @@ customerRoute.use(express.json());
 //allows cookies to be sent to request header
 customerRoute.use(cookieParser());
 
-// const salt = 10;
-// customerRoute.put("/", (req, res) => {
-//   const sql = "UPDATE customers SET `password` = ?;";
+const salt = 10;
+customerRoute.put("/", (req, res) => {
+  const sql = "UPDATE customers SET `password` = ?;";
 
-//   //changes our plain text password into encrypted password
-//   bcrypt.hash(req.body.password, salt, (err, hashPassword) => {
-//     if (err) return res.json({ Error: "Error for hashing password" });
-//     const pw = [hashPassword];
-//     db.query(sql, [pw], (err, sqlResult) => {
-//       if (err) return res.json({ Error: "Inserting data error in server" });
-//       return res.json({ Status: "Success" });
-//     });
-//   });
-// });
-customerRoute.post("/", (req, res) => {
+  //changes our plain text password into encrypted password
+  bcrypt.hash(req.body.password, salt, (err, hashPassword) => {
+    if (err) return res.json({ Error: "Error for hashing password" });
+    const pw = [hashPassword];
+    db.query(sql, [pw], (err, sqlResult) => {
+      if (err) return res.json({ Error: "Inserting data error in server" });
+      return res.json({ Status: "Success" });
+    });
+  });
+});
+customerRoute.post("/login", (req, res) => {
   const sql =
     "SELECT customerID, Email, password FROM customers where Email=?;";
-  db.query(sql, [req.body.email], (err, result) => {
+  //data is sql results
+  db.query(sql, [req.body.email], async (err, result) => {
     //sql query error
     if (err) return res.send("sql query error");
 
@@ -38,10 +39,8 @@ customerRoute.post("/", (req, res) => {
       return res.json({ Response: "Email doesnt exist" });
     }
     //database stored password
-    const { password } = result[0];
+    const { password, customerID, Email } = result[0];
     const inputedPassword = req.body.password;
-    //database stored id
-    const { customerID } = result[0];
 
     //compare user inputted password to resulted query hash
     bcrypt.compare(inputedPassword, password, (err, result) => {
@@ -51,12 +50,12 @@ customerRoute.post("/", (req, res) => {
       if (!result) {
         return res.json({ Response: "Password not found" });
       }
-      //customerID from sql query
+
       //create token for user
-      console.log(customerID);
       const payload = {
-        id: customerID,
+        customerID: customerID,
         role: "Customer",
+        email: req.body.email,
       };
       const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "1d",
@@ -65,22 +64,35 @@ customerRoute.post("/", (req, res) => {
         httpOnly: true,
         secure: true,
         sameSite: "none",
+        maxAge: 86400000,
       });
       return res.json({ auth: true, token: token });
     });
   });
 });
+
 const verifyUser = (req, res, next) => {
   const token = req.cookies.token;
+
   if (!token) {
-    return res.json({ Verify: false });
+    req.manualVerify = false; // Set this flag to false if no token is provided
+    // res.json({ Verify: false }); // Return response immediately if no token
+    return next();
   } else {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-      if (err) return res.json({ Verify: false });
-      req.user = decoded;
-      next();
+      if (err) {
+        req.manualVerify = false; // Set this flag to false if there's an error verifying the token
+        return res.json({ Verify: false }); // Return response immediately if token verification fails
+      }
+      req.manualVerify = true; // Set this flag to true if the user is verified
+      req.user = decoded; // Attach the decoded user data to the request object
+      next(); // Proceed to the next middleware/route handler
     });
   }
 };
-
-module.exports = customerRoute;
+// @ts-ignore
+customerRoute.get("/verify", verifyUser, (req, res) => {
+  // @ts-ignore
+  return res.json({ Verify: true, customer: req.user });
+});
+module.exports = { customerRoute, verifyUser };

@@ -1,0 +1,11 @@
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.quantity-selector button {
+  margin: 0;
+}
+.ticket-date-container {
+  grid-column: span 2;
+}

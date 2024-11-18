@@ -1,102 +1,164 @@
-// TicketForm.js
-import { useState } from "react";
-import Select from "react-select";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "../components/header";
+import "./ticketForm.css";
+import { useTicket } from "../utils/TicketContext";
+import { useCart } from "../utils/CartContext";
 
 const TicketForm = () => {
-  // Get today's date in YYYY-MM-DD
-  const today = new Date().toISOString().split("T")[0];
+  const { totalTickets, setTotalTickets } = useCart();
+  // prettier-ignore
+  const { childQuantity, adultQuantity, seniorQuantity, setChildQuantity, 
+    setAdultQuantity, setSeniorQuantity, totalPrice,
+    setTotalPrice,
+} = useTicket();
+  // Initialize state for form data
+  const [visitDate, setVisitDate] = useState({});
 
-  // Calculate default expiry date (one week from today)
-  const expiryDateDefault = new Date();
-  expiryDateDefault.setDate(expiryDateDefault.getDate() + 7);
-  const defaultExpiryDate = expiryDateDefault.toISOString().split("T")[0];
-
-  // default start and expiry dates
-  const [ticketData, setTicketData] = useState({
-    ticketType: "", // Store selected ticket type
-    ticketPrice: "", // Store selected ticket price
-    startDate: today, // Default start date to today
-    expiryDate: defaultExpiryDate, // Default expiry date to one week from today
-  });
-
-  //  options for ticket types with prices
-  const ticketTypeOptions = [
-    { value: 0, label: "Children - $10", price: 10 },
-    { value: 1, label: "Adult - $15", price: 15 },
-    { value: 2, label: "Senior - $12", price: 12 },
-  ];
-
-  // Handle ticket type selection change
-  const handleSelectChange = (selectedOption) => {
-    setTicketData({
-      ...ticketData,
-      ticketType: selectedOption.value,
-      ticketPrice: selectedOption.price,
-    });
+  // Prices for each ticket type
+  const ticketPrices = {
+    child: 30, // Example price for child tickets
+    adult: 40, // Example price for adult tickets
+    senior: 25, // Example price for senior tickets
   };
 
-  // Handle input changes for other fields
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setTicketData({ ...ticketData, [name]: value });
-  };
+  // Recalculate total tickets and price whenever quantities change
+  useEffect(() => {
+    const total = childQuantity + adultQuantity + seniorQuantity;
+    setTotalTickets(total);
 
-  // Form submission handler
-  const handleSubmit = async (e) => {
+    const price =
+      childQuantity * ticketPrices.child +
+      adultQuantity * ticketPrices.adult +
+      seniorQuantity * ticketPrices.senior;
+    setTotalPrice(price);
+  }, [childQuantity, adultQuantity, seniorQuantity]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    try {
-      // Send POST request to the server API
-      const response = await axios.post(
-        "http://localhost:3000tickets/create",
-        ticketData
-      );
-      alert(`Ticket created with ID: ${response.data.ticketID}`);
-    } catch (error) {
-      console.error("Error creating ticket:", error);
-      alert("Failed to create ticket. Please try again.");
-    }
+    const customerID = 78998509;
+    const tickets = [
+      { type: 0, quantity: childQuantity }, // child
+      { type: 1, quantity: adultQuantity }, // adult
+      { type: 2, quantity: seniorQuantity }, //senior
+    ];
+    const { date } = visitDate;
+
+    const data = {
+      tickets,
+      date,
+    };
+   // Example of sending data to the server (you can replace the URL)
+    axios
+      .post(
+        "https://themepark-backend.onrender.com/tickets/purchase-tickets",
+        data,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        alert(res.data.Response);
+        // Optionally, handle response (redirect, alert, etc.)
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   return (
     <>
       <Header />
       <div className="dataentryformcontainer">
-        <h1>Add New Ticket</h1>
+        <h1>Purchase Ticket</h1>
+
         <form onSubmit={handleSubmit}>
-          {/* Ticket type dropdown */}
-          <label>Ticket Type:</label>
-          <Select
-            options={ticketTypeOptions}
-            onChange={handleSelectChange}
-            placeholder="Select Ticket Type"
-            required
-          />
+          <label htmlFor="child">Child Ticket ${ticketPrices.child}</label>
+          <div className="quantity-selector">
+            <input
+              type="text"
+              name="child"
+              id="child"
+              value={childQuantity}
+              readOnly
+            />
+            <button
+              type="button"
+              onClick={() => setChildQuantity((prev) => prev + 1)}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              onClick={() => setChildQuantity((prev) => Math.max(prev - 1, 0))}
+            >
+              -
+            </button>
+          </div>
 
-          {/* Start date input, defaulting to today's date */}
-          <label>Start Date:</label>
-          <input
-            type="date"
-            name="startDate"
-            value={ticketData.startDate}
-            onChange={handleChange}
-            required
-          />
+          <label htmlFor="adult">Adult Ticket ${ticketPrices.adult}</label>
+          <div className="quantity-selector">
+            <input
+              type="text"
+              name="adult"
+              id="adult"
+              value={adultQuantity}
+              readOnly
+            />
+            <button
+              type="button"
+              onClick={() => setAdultQuantity((prev) => prev + 1)}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              onClick={() => setAdultQuantity((prev) => Math.max(prev - 1, 0))}
+            >
+              -
+            </button>
+          </div>
 
-          {/* Expiry date input, defaulting to one week from today */}
-          <label>Expiry Date:</label>
-          <input
-            type="date"
-            name="expiryDate"
-            value={ticketData.expiryDate}
-            onChange={handleChange}
-            required
-          />
+          <label htmlFor="senior">Senior Ticket ${ticketPrices.senior}</label>
+          <div className="quantity-selector">
+            <input
+              type="text"
+              name="senior"
+              id="senior"
+              value={seniorQuantity}
+              readOnly
+            />
+            <button
+              type="button"
+              onClick={() => setSeniorQuantity((prev) => prev + 1)}
+            >
+              +
+            </button>
+            <button
+              type="button"
+              onClick={() => setSeniorQuantity((prev) => Math.max(prev - 1, 0))}
+            >
+              -
+            </button>
+          </div>
+          <div className="ticket-date-container">
+            <label htmlFor="date">Plan Your Vist</label>
+            <input
+              type="date"
+              onChange={(e) =>
+                setVisitDate({ ...visitDate, date: e.target.value })
+              }
+            />
+          </div>
 
-          {/* Submit button */}
-          <button type="submit">Submit</button>
+          {/* Display Total Tickets and Total Price */}
+          <div className="cart-summary">
+            <p>Total Tickets: {totalTickets}</p>
+            <p>Total Price: ${totalPrice}</p>
+          </div>
+
+          <button type="submit">Purchase</button>
         </form>
       </div>
     </>

@@ -9,24 +9,23 @@ parkStatusRoute.use(express.json());
 
 parkStatusRoute.post("/create", (req, res) => {
   const {
-    parkStatusDate,
+    date,
     weatherType,
   } = req.body;
-  const sql =
+  const query =
     "INSERT INTO parkstatus (date, weatherType) VALUES (?,?)";
-  db.query(
-    sql,
+  db.execute(
+    query,
     [
-      parkStatusDate,
+      date,
       weatherType,
     ],
-    (err, result) => {
-      if (err) console.log(err);
-      else {
-        res.send("data recieved");
-      }
+    (error, results) => {
+      if (error) {
+        console.error("Error inserting into parkstatus", error);
+        return res.status(500).json({ error: "Failed to insert park day" });
     }
-  );
+    });
 });
 parkStatusRoute.get("/read", (req, res) => {
   const sql = "SELECT * from parkstatus WHERE date >= CURRENT_DATE";
@@ -47,21 +46,16 @@ parkStatusRoute.get("/read/:parkStatusID", (req, res) => {
   });
 });
 
-parkStatusRoute.put("/update", (req, res) => {
+parkStatusRoute.put("/:id", (req, res) => {
   const {
-    parkStatusID,
-    parkStatusDate,
+    date,
     weatherType,
+    parkStatusID
   } = req.body;
-  const sql = `UPDATE parkstatus SET parkStatusDate=?, weatherType=? WHERE parkStatusID = ?;`;
-  db.query(
-    sql,
-    [
-      parkStatusDate,
-      weatherType,
-      parkStatusID
-    ],
-    (err, result) => {
+  const query = `UPDATE parkstatus SET date=?, weatherType=? WHERE parkStatusID = ?;`;
+  db.execute(query,
+    [date, weatherType, parkStatusID,],
+    (err, results) => {
       if (err) console.log(err);
       res.send("row updated");
     }

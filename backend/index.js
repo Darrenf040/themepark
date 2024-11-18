@@ -1,9 +1,11 @@
+// index.js
 const express = require("express");
 const cors = require("cors");
 const app = express();
 const path = require("path");
 const multer = require("multer");
 
+// Import route modules
 const auth = require("./routes/auth");
 const employee = require("./routes/employee");
 const parkstatus = require("./routes/parkstatus");
@@ -15,8 +17,10 @@ const employeeAuth = require("./routes/employeeAuth");
 const tickets = require("./routes/tickets");
 const adminTickets = require("./routes/adminTickets");
 const reportsRoute = require("./routes/reports");
-const customerRoute = require("./routes/customerLogin");
+const { customerRoute } = require("./routes/customerLogin");
+const customerInfoRoute = require("./routes/customer");
 
+// Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "public/images"));
@@ -26,16 +30,20 @@ const storage = multer.diskStorage({
   },
 });
 
+// **CORS Configuration**
 app.use(
   cors({
+    origin: "https://gleaming-lokum-158537.netlify.app", // Update this to match your frontend's origin
     credentials: true,
-    origin: "http://localhost:5173",
     methods: ["POST", "GET", "PUT", "DELETE"],
   })
 );
 
+// Middleware
 app.use(express.json());
 app.use("/images", express.static(path.join(__dirname, "public/images")));
+
+// Routes
 app.use("/admin", auth);
 app.use("/employee", employee);
 app.use("/parkstatus", parkstatus);
@@ -48,11 +56,14 @@ app.use("/tickets", tickets);
 app.use("/adminTickets", adminTickets);
 app.use("/reports", reportsRoute);
 app.use("/customer", customerRoute);
+app.use("/customers", customerInfoRoute);
 
 app.get(`/`, (req, res) => {
   res.send(`Cors-enabled for specified domain`);
 });
 
-app.listen(3000, () => {
-  console.log("server running");
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

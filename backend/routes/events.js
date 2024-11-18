@@ -22,7 +22,7 @@ eventsRoute.use(express.json());
 eventsRoute.use("/images", express.static(path.join(__dirname, "public/images")));
 
 eventsRoute.get("/read", (req, res) => {
-  const sql = "SELECT * FROM specialevents WHERE startDate >= CURRENT_DATE ORDER BY startDate";
+  const sql = "SELECT * FROM specialevents WHERE deleteStatus = 0 and startDate >= CURRENT_DATE ORDER BY startDate";
   db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
@@ -39,7 +39,6 @@ eventsRoute.post('/create', (req, res) => {
     startDate,
     endDate,
   } = req.body;
-  //const imageFileName = req.file ? req.file.filename : under-construction.webp;
 
   // Basic validation
   if (!eventName || eventType === undefined) {
@@ -48,8 +47,8 @@ eventsRoute.post('/create', (req, res) => {
 
   // Define SQL query for inserting a special event
   const query = `
-    INSERT INTO specialevents (eventName, eventType, startDate, endDate)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO specialevents (eventName, eventType, startDate, endDate, deleteStatus)
+    VALUES (?, ?, ?, ?, 0)
   `;
 
   // Execute the query with the provided form data
@@ -58,8 +57,7 @@ eventsRoute.post('/create', (req, res) => {
     eventType,
     startDate,
     endDate,
-    imageFileName
-  ], (error, results) => {
+   ], (error, results) => {
     if (error) {
       console.error("Error inserting special event:", error);
       return res.status(500).json({ error: "Failed to insert special event" });
@@ -71,8 +69,13 @@ eventsRoute.post('/create', (req, res) => {
 });
 
 eventsRoute.delete('/:id', (req, res) => {
-  db.query('DELETE FROM SpecialEvents WHERE eventID = ?', [req.params.id], (err) => {
-      if (err) throw err;
+  db.query('update SpecialEvents set deleteStatus = 1 WHERE eventID = ?', [req.params.id], (err) => {
+      if (err) { 
+        throw err;
+      }
+      else {
+      res.send("Event deleted successfully");
+      }
   });
 });
 
@@ -83,7 +86,7 @@ eventsRoute.put('/:id', (req, res) => {
       [eventName, eventType, startDate, endDate, req.params.id],
       (err) => {
           if (err) throw err;
-       //   res.redirect('/events');
+          res.send("Event updated successfully");
       }
   );
 });
@@ -92,7 +95,7 @@ eventsRoute.get("/upcoming-events", (req, res) => {
   const query = `
       SELECT eventName, eventType, startDate, endDate
       FROM SpecialEvents
-      WHERE startDate > NOW()
+      WHERE deleteStatus = 0 and startDate > NOW()
       ORDER BY startDate ASC
       LIMIT 5
   `;
@@ -128,4 +131,3 @@ eventsRoute.get("/upcoming-maintenance", (req, res) => {
 
 
 module.exports = eventsRoute;
-

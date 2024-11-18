@@ -1,0 +1,136 @@
+/* CustomerDetails.css */
+.customer-details-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .customer-details-container h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333333;
+  }
+  
+  .customer-info p {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #555555;
+  }
+  
+  .customer-info strong {
+    color: #333333;
+  }
+  
+  .customer-edit-form .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .customer-edit-form label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333333;
+  }
+  
+  .customer-edit-form input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+  }
+  
+  .button-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .button-group button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .edit-button,
+  .save-button {
+    background-color: #007bff;
+    color: #ffffff;
+  }
+  
+  .cancel-button {
+    background-color: #6c757d;
+    color: #ffffff;
+  }
+  
+  .edit-button:hover,
+  .save-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .cancel-button:hover {
+    background-color: #5a6268;
+  }
+  
+  @media (max-width: 600px) {
+    .customer-details-container {
+      margin: 20px;
+      padding: 15px;
+    }
+  
+    .button-group {
+      flex-direction: column;
+    }
+  
+    .button-group button {
+      margin: 10px 0;
+      width: 100%;
+    }
+  }
+  /* Tickets Section */
+.customer-tickets {
+    margin-top: 40px;
+  }
+  
+  .customer-tickets h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333333;
+  }
+  
+  .tickets-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .tickets-table th,
+  .tickets-table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .tickets-table th {
+    background-color: #f2f2f2;
+    color: #333333;
+  }
+  
+  .tickets-table tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    /* ... existing responsive styles ... */
+  
+    .tickets-table,
+    .tickets-table th,
+    .tickets-table td {
+      font-size: 14px;
+    }
+  }
+  
