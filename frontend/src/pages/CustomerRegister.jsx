@@ -42,7 +42,7 @@ const CustomerRegister = () => {
 
     try {
       // Send POST request to /customers/register
-      const response = await axios.post("http://localhost:3000/customer/register", formData);
+      const response = await axios.post("https://themepark-backend.onrender.com/customer/register", formData);
 
       // Handle successful registration
       if (response.status === 201) {
