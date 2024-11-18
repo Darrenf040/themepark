@@ -15,13 +15,13 @@ export default function EmployeeLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://themepark-backend.onrender.com/employees/auth", values, {
+      .post("https://gleaming-lokum-158537.netlify.app/employees/auth", values, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth) {
           axios
-            .get("https://themepark-backend.onrender.com/employees/verify", {
+            .get("https://gleaming-lokum-158537.netlify.app/employees/verify", {
               withCredentials: true,
             })
             .then((res) => {

@@ -6,6 +6,8 @@ const reportsRoute = express.Router();
 reportsRoute.use(cors());
 reportsRoute.use(express.json());
 
+// Route 1: maintenance
+
 reportsRoute.post("/maintenance", (req, res) => {
     const query = `
       SELECT 
@@ -34,7 +36,7 @@ WHERE
     })
   });
   
-  // Route 3: Ticket Sales Data
+  // Route 2: Ticket Sales Data
   reportsRoute.post("/ticket-sales", async (req, res) => {
     const query = `
       SELECT 
@@ -43,7 +45,8 @@ WHERE
     tt.ticketName,
     t.startDate,
     t.expiryDate,
-    SUM(tt.ticketPrice) AS totalTicketPrice
+    SUM(tt.ticketPrice) AS totalTicketPrice,
+    LENGTH(GROUP_CONCAT(t.ticketID)) - LENGTH(REPLACE(GROUP_CONCAT(t.ticketID), ',', '')) + 1 AS ticketCount
 FROM 
     ticket t
 JOIN 
@@ -59,42 +62,43 @@ GROUP BY
 ORDER BY 
     t.startDate, 
     t.expiryDate;
+
     `;
   
     db.query(query, [req.body.startDate, req.body.expiryDate, req.body.ticketName, ], (err, result) => {
       if(err) return res.json({Error:err})
-        // console.log(result)
-        // console.log(req.body)
+        console.log(result)
+        console.log(req.body)
         return res.json({Result: result})
     })
   });
   
   // Route 4: Shop Transactions Data
-  reportsRoute.post("/shop-transactions",  (req, res) => {
-    const query = `
-      SELECT 
-    shop.shopName,
-    shop.shopID,
-    shop.location,
-    transactions.transactionDate,
-    SUM(transactions.transactionAmount) AS totalTransactionAmount
-FROM 
-    shop 
-JOIN 
-    transactions ON shop.shopID = transactions.shopID
-WHERE 
-    shop.shopName = ?
-    AND transactions.transactionDate BETWEEN ? AND ?
-GROUP BY 
-    shop.shopName, shop.shopID, shop.location, transactions.transactionID, transactions.transactionDate
-ORDER BY 
-    shop.shopName;
-    `;
-    db.query(query, [req.body.shopName, req.body.startDate, req.body.endDate], (err, result) => {
-      if(err) return res.json({Error:err})
-        return res.json({Result: result})
-    })
-    });
+//   reportsRoute.post("/shop-transactions",  (req, res) => {
+//     const query = `
+//       SELECT 
+//     shop.shopName,
+//     shop.shopID,
+//     shop.location,
+//     transactions.transactionDate,
+//     SUM(transactions.transactionAmount) AS totalTransactionAmount
+// FROM 
+//     shop 
+// JOIN 
+//     transactions ON shop.shopID = transactions.shopID
+// WHERE 
+//     shop.shopName = ?
+//     AND transactions.transactionDate BETWEEN ? AND ?
+// GROUP BY 
+//     shop.shopName, shop.shopID, shop.location, transactions.transactionID, transactions.transactionDate
+// ORDER BY 
+//     shop.shopName;
+//     `;
+//     db.query(query, [req.body.shopName, req.body.startDate, req.body.endDate], (err, result) => {
+//       if(err) return res.json({Error:err})
+//         return res.json({Result: result})
+//     })
+//     });
 
     // Route 5:Refund
     reportsRoute.post("/refund-info",  (req, res) => {

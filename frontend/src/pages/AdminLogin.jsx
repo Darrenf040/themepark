@@ -17,13 +17,13 @@ export default function AdminLogin() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://themepark-backend.onrender.com/admin", values, {
+      .post("https://gleaming-lokum-158537.netlify.app/admin", values, {
         withCredentials: true,
       })
       .then((res) => {
         if (res.data.auth) {
           axios
-            .get("https://themepark-backend.onrender.com/admin/verify", {
+            .get("https://gleaming-lokum-158537.netlify.app/admin/verify", {
               withCredentials: true,
             })
             .then((res) => {

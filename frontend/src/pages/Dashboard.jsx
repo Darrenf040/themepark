@@ -21,7 +21,7 @@ const Dashboard = () => {
         // Fetch top 5 popular rides
         const fetchTopRides = async () => {
             try {
-                const response = await axios.get("https://themepark-backend.onrender.com/rides/top-rides");
+                const response = await axios.get("https://gleaming-lokum-158537.netlify.app/rides/top-rides");
                 setTopRides(response.data.result);
             } catch (error) {
                 console.error("Error fetching top rides:", error);
@@ -31,7 +31,7 @@ const Dashboard = () => {
         // Fetch top 5 upcoming events
         const fetchUpcomingEvents = async () => {
             try {
-                const response = await axios.get("https://themepark-backend.onrender.com/events/upcoming-events");
+                const response = await axios.get("https://gleaming-lokum-158537.netlify.app/events/upcoming-events");
                 setUpcomingEvents(response.data.result);
             } catch (error) {
                 console.error("Error fetching upcoming events:", error);
@@ -41,7 +41,7 @@ const Dashboard = () => {
         // Fetch top 5 upcoming maintenance
         const fetchUpcomingMaintenance = async () => {
             try {
-                const response = await axios.get("https://themepark-backend.onrender.com/events/upcoming-maintenance");
+                const response = await axios.get("https://gleaming-lokum-158537.netlify.app/events/upcoming-maintenance");
                 setUpcomingMaintenance(response.data.result);
             } catch (error) {
                 console.error("Error fetching upcoming maintenance:", error);
@@ -50,7 +50,7 @@ const Dashboard = () => {
 
         const fetchEvents = async () => {
             try {
-                const response = await axios.get("https://themepark-backend.onrender.com/events/read");
+                const response = await axios.get("https://gleaming-lokum-158537.netlify.app/events/read");
                 setEvents(response.data.result);
             } catch (error) {
                 console.error("Error fetching upcoming maintenance:", error);
@@ -146,7 +146,7 @@ const Dashboard = () => {
 
     const handleUpdateMaint = async () => {
         try {
-            await axios.put(`https://themepark-backend.onrender.com/maintenance/${editingMaint.maintenanceID}`, editingMaint);
+            await axios.put(`https://gleaming-lokum-158537.netlify.app/maintenance/${editingMaint.maintenanceID}`, editingMaint);
             fetchEvents();
             setEditModalOpen(false);
             setEditingMaint(null);

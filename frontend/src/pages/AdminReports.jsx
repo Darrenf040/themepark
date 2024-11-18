@@ -5,8 +5,8 @@ import axios from "axios";
 export default function AdminReports(){
   const [filterDate, setFilterDate] = useState({})
   const [rideMaint, setRideMaint] = useState([])
-  const [shopData, setShopData] = useState({})
-  const [filterShops, setFilterShops] = useState([])
+  // const [shopData, setShopData] = useState({})
+  // const [filterShops, setFilterShops] = useState([])
   const [ticketDate, setticketDate] = useState({})
   const [filtertickets, setFiltertickets] = useState([])
   const [refundDate, setrefundDate] = useState({})
@@ -20,7 +20,7 @@ const  postmMintenance =  (e) => {
    setRideMaint([{...rideMaint, maintenanceOpenDate: new Date(filterDate.startDate).toISOString().split('T')[0], // YYYY-MM-DD
     maintenanceCloseDate: new Date(filterDate.endDate).toISOString().split('T')[0],     // YYYY-MM-DD
   }]);
-  axios.post("https://themepark-backend.onrender.com/reports/maintenance", filterDate)
+  axios.post("https://gleaming-lokum-158537.netlify.app/reports/maintenance", filterDate)
   .then(res =>{
     setRideMaint(res.data.Result)
   })
@@ -29,17 +29,17 @@ const  postmMintenance =  (e) => {
 
 }
 
-const  transaction =  (e) => {
+// const  transaction =  (e) => {
 
-  e.preventDefault();
-  axios.post("https://themepark-backend.onrender.com/reports/shop-transactions",shopData)
-  .then(res => setFilterShops(res.data.Result))
-  .catch(err => alert(err))
-}
+//   e.preventDefault();
+//   axios.post("https://gleaming-lokum-158537.netlify.app/reports/shop-transactions",shopData)
+//   .then(res => setFilterShops(res.data.Result))
+//   .catch(err => alert(err))
+// }
 const  ticketSales =  (e) => {
 
   e.preventDefault();
-  axios.post("https://themepark-backend.onrender.com/reports/ticket-sales",ticketDate)
+  axios.post("https://gleaming-lokum-158537.netlify.app/reports/ticket-sales",ticketDate)
   .then(res => setFiltertickets(res.data.Result))
   .catch(err => alert(err))
 }
@@ -47,9 +47,15 @@ const  ticketSales =  (e) => {
 const  refund =  (e) => {
 
   e.preventDefault();
-  axios.post("https://themepark-backend.onrender.com/reports/refund-info", refundDate)
-  .then(res =>setFilterrefund(res.data.Result))
-  .catch(err => alert(err))
+  axios.post("https://gleaming-lokum-158537.netlify.app/reports/refund-info", refundDate)
+  .then(res =>{setFilterrefund(res.data.Result);
+  const totalSales = res.data.Result.reduce((acc, ticket) => {
+    return acc + (ticket.totalTicketPrice || 0); // Ensure to handle missing or null values
+  }, 0);
+
+  console.log("Total Ticket Sales:", totalSales);
+})
+  .catch(err => alert(err));
   console.log(filterrefund)
 }
 
@@ -58,6 +64,22 @@ const  refund =  (e) => {
     <AdminHeader />
     <h1>Maintenance Schedule</h1>
     <form action="" onSubmit={postmMintenance} >
+    <label htmlFor="rideName">Filter by Ride Name</label>
+  <select
+    id="rideName"
+    onChange={(e) =>
+      setFilterDate({ ...filterDate, rideName: e.target.value })
+    }
+  >
+    <option value="">All Rides</option>
+    {Array.from(new Set(rideMaint.map((ride) => ride.rideName))).map(
+      (rideName, index) => (
+        <option key={index} value={rideName}>
+          {rideName}
+        </option>
+      )
+    )}
+  </select>
       <label htmlFor="startDate">Start Date</label>
       <input type="date" onChange={(e) => setFilterDate({...filterDate, startDate: e.target.value})} />
 
@@ -66,171 +88,192 @@ const  refund =  (e) => {
       <button type="submit">Generate</button>
     </form>
     <table>
-      <tr>
-        <th>RideID</th>
-        <th>Ride Name</th>
-        <th>Status</th>
-        <th>Open Date</th>
-        <th>Close Date</th>
-        <th>Technician First Name</th>
-        <th>Technician Last Name</th>
-      </tr>
+  <thead>
+    <tr>
+      <th>RideID</th>
+      <th>Ride Name</th>
+      <th>Status</th>
+      <th>Open Date</th>
+      <th>Close Date</th>
+      <th>Technician First Name</th>
+      <th>Technician Last Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    {rideMaint
+      .filter((ride) =>
+        filterDate.rideName
+          ? ride.rideName === filterDate.rideName
+          : true
+      )
+      .map((ride, key) => (
+        <tr key={key}>
+          <td>{ride.rideID}</td>
+          <td>{ride.rideName}</td>
+          <td>
+            {
+              {
+                0: "Incomplete",
+                1: "Complete",
+                2: "Event Maintenance",
+                3: "Requires Rescheduling",
+                4: "Cancelled",
+              }[ride.maintenanceStatus] || "Unknown"
+            }
+          </td>
+          <td>
+            {new Date(ride.maintenanceOpenDate).toISOString().split("T")[0]}
+          </td>
+          <td>
+            {new Date(ride.maintenanceCloseDate).toISOString().split("T")[0]}
+          </td>
+          <td>{ride.Fname}</td>
+          <td>{ride.Lname}</td>
+        </tr>
+      ))}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colSpan="6" style={{ textAlign: "right", fontWeight: "bold" }}>
+        Total Occurrence:
+      </td>
+      <td style={{ fontWeight: "bold" }}>{rideMaint.filter((ride) =>
+        filterDate.rideName ? ride.rideName === filterDate.rideName : true).length}</td>
+    </tr>
+  </tfoot>
+</table>
+  
+        <h1>Ticket Sale</h1>
+<form onSubmit={ticketSales}>
+  <label htmlFor="ticketName">Ticket Type</label>
+  <select
+    id="ticketName"
+    onChange={(e) => {
+      setticketDate({ ...ticketDate, ticketName: e.target.value });
+    }}
+  >
+    <option selected disabled value="">
+      Select a ticket type
+    </option>
+    <option value="Adult">Adult</option>
+    <option value="Senior">Senior</option>
+    <option value="Child">Child</option>
+  </select>
 
-       {rideMaint &&
-        rideMaint.map((ride, key) => {
-          return (
-            <>
-              <tr>
-                <td>{ride.rideID}</td>
-                <td>{ride.rideName}</td>
-                <td>{ride.maintenanceStatus}</td>
-                <td>{new Date(ride.maintenanceOpenDate).toISOString().split('T')[0]}</td>
-                <td>{new Date(ride.maintenanceCloseDate).toISOString().split('T')[0]}</td>
-                <td>{ride.Fname}</td>
-                <td>{ride.Lname}</td>
+  <label htmlFor="startDate">Start Date</label>
+  <input
+    type="date"
+    id="startDate"
+    onChange={(e) => setticketDate({ ...ticketDate, startDate: e.target.value })}
+  />
+
+  <label htmlFor="expiryDate">Expire Date</label>
+  <input
+    type="date"
+    id="expiryDate"
+    onChange={(e) => setticketDate({ ...ticketDate, expiryDate: e.target.value })}
+  />
+  
+  <button type="submit">Generate</button>
+</form>
+
+<table>
+  <thead>
+    <tr>
+      <th>Number of Tickets</th>
+      <th>Name</th>
+      <th>Start Date</th>
+      <th>Expire Date</th>
+      <th>Total Ticket Sales</th>
+    </tr>
+  </thead>
+  <tbody>
+    {filtertickets &&
+      filtertickets.map((ticket, key) => (
+        <tr key={key}>
+          <td>{ticket.ticketCount}</td>
+          <td>{ticket.ticketName}</td>
+          <td>{new Date(ticket.startDate).toISOString().split('T')[0]}</td>
+          <td>{new Date(ticket.expiryDate).toISOString().split('T')[0]}</td>
+          <td>{ticket.totalTicketPrice}</td>
+        </tr>
+      ))}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colSpan="4" style={{ textAlign: "right", fontWeight: "bold" }}>Total Sales:</td>
+      <td style={{ fontWeight: "bold" }}>
+        {filtertickets.reduce(
+          (acc, ticket) => acc + (ticket.totalTicketPrice || 0),
+          0
+        )}
+      </td>
+    </tr>
+  </tfoot>
+</table>
 
 
-              </tr>
-            </>
-          );
-        })}
+<h1>Canceled Ticket</h1>
+<form action="" onSubmit={refund}>
+  <label htmlFor="startDate">Start Date</label>
+  <input
+    type="date"
+    onChange={(e) =>
+      setrefundDate({ ...refundDate, startDate: e.target.value })
+    }
+  />
 
-        </table>
-    <h1>Shops Sales</h1>
-    <form action="" onSubmit={transaction} >
-    <label htmlFor="shopName">Shop Name</label>
-      <select name="" id="" onChange={(e) => setShopData({...shopData, shopName: e.target.value})}>
-        <option selected disabled value="">Select a ride</option>
-        <option value="Desserts ThemeRestaurant">Desserts ThemeRestaurant</option>
-        <option value="Themepark Gifts">Themepark Gifts</option>
-        <option value="Themepark Convenience">Themepark Convenience</option>
-        <option value="Themepark Collectables">Themepark Collectables</option>
-        <option value="Tacos ThemeRestaurant">Tacos ThemeRestaurant</option>
-        <option value="Pasta ThemeRestaurant">Pasta ThemeRestaurant</option>
-        <option value="Sandwiches ThemeRestaurant">Sandwiches ThemeRestaurant</option>
-        <option value="Themepark Family Gifts">Themepark Family Gifts</option>
-        <option value="Seafood ThemeRestaurant">Seafood ThemeRestaurant</option>
-        <option value="Themepark Apparel">Themepark Apparel</option>
-      </select>
+  <label htmlFor="expiryDate">Expire Date</label>
+  <input
+    type="date"
+    onChange={(e) =>
+      setrefundDate({ ...refundDate, expiryDate: e.target.value })
+    }
+  />
+  <button type="submit">Generate</button>
+</form>
+<table>
+  <thead>
+    <tr>
+      <th>Ticket ID</th>
+      <th>Type</th>
+      <th>Customer ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Phone Number</th>
+      <th>Email</th>
+      <th>Start Date</th>
+      <th>Expire Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {filterrefund &&
+      filterrefund.map((refund, key) => (
+        <tr key={key}>
+          <td>{refund.ticketID}</td>
+          <td>{refund.ticketName}</td>
+          <td>{refund.customerID}</td>
+          <td>{refund.Fname}</td>
+          <td>{refund.Lname}</td>
+          <td>{refund.phoneNumber}</td>
+          <td>{refund.Email}</td>
+          <td>{new Date(refund.startDate).toISOString().split("T")[0]}</td>
+          <td>{new Date(refund.expiryDate).toISOString().split("T")[0]}</td>
+        </tr>
+      ))}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colSpan="8" style={{ textAlign: "right", fontWeight: "bold" }}>
+        Total Tickets Cancelled:
+      </td>
+      <td style={{ fontWeight: "bold" }}>
+        {filterrefund ? filterrefund.length : 0}
+      </td>
+    </tr>
+  </tfoot>
+</table>
 
-      <label htmlFor="startDate">Start Date</label>
-      <input type="date" onChange={(e) => setShopData({...shopData, startDate: e.target.value})} />
-
-      <label htmlFor="endDate">End Date</label>
-      <input type="date" onChange={(e) => setShopData({...shopData, endDate: e.target.value})} />
-      <button type="submit">Generate</button>
-    </form>
-    <table>
-      <tr>
-        <th>Name</th>
-        <th>id</th>
-        <th>location</th>
-        <th>Date</th>
-        <th>total</th>
-      </tr>
-      {filterShops && filterShops.map((shop, key) => {
-        return(
-          <>
-          <tr>
-            <td>{shop.shopName}</td>
-            <td>{shop.shopID}</td>
-            <td>{shop.location}</td>
-            <td>{new Date(shop.transactionDate).toISOString().split('T')[0]}</td>
-            <td>{shop.totalTransactionAmount}</td>
-
-          </tr>
-          </>
-        )
-      })}
-    </table>
-    <h1>Ticket Sale</h1>
-    <form action="" onSubmit={ticketSales} >
-    <label htmlFor="ticketName">Ticket Type</label>
-      <select name="" id="" onChange={(e) => {
-        setticketDate({...ticketDate, ticketName: e.target.value})
-        console.log(e.target.value)
-      }}>
-        <option selected disabled value="">Select a ticket type</option>
-        <option value="Adult">Adult</option>
-        <option value="Senior">Senior</option>
-        <option value="Child">Child</option>
-      </select>
-
-      <label htmlFor="startDate">Start Date</label>
-      <input type="date" onChange={(e) => setticketDate({...ticketDate, startDate: e.target.value})} />
-
-      <label htmlFor="expiryDate">Expire Date</label>
-      <input type="date" onChange={(e) => setticketDate({...ticketDate, expiryDate: e.target.value})} />
-      <button type="submit">Generate</button>
-    </form>
-
-    <table>
-      <tr>
-        <th>IDs</th>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Start Date</th>
-        <th>Expire Date</th>
-        <th>Total Ticket Sales</th>
-      </tr>
-      {filtertickets && filtertickets.map((ticket, key) => {
-        return(
-          <>
-          <tr>
-            <td>{ticket.ticketIDs}</td>
-            <td>{ticket.ticketType}</td>
-            <td>{ticket.ticketName}</td>
-            <td>{new Date(ticket.startDate).toISOString().split('T')[0]}</td>
-            <td>{new Date(ticket.expiryDate).toISOString().split('T')[0]}</td>
-            <td>{ticket.totalTicketPrice}</td>
-
-          </tr>
-          </>
-        )
-      })}
-    </table>
-    <h1>Canceled Ticket</h1>
-    <form action="" onSubmit={refund} >
-      <label htmlFor="startDate">Start Date</label>
-      <input type="date" onChange={(e) => setrefundDate({...refundDate, startDate: e.target.value})} />
-
-      <label htmlFor="expiryDate">Expire Date</label>
-      <input type="date" onChange={(e) => setrefundDate({...refundDate, expiryDate: e.target.value})} />
-      <button type="submit">Generate</button>
-    </form>
-    <table>
-      <tr>
-        <th>ticketID</th>
-        <th>Type</th>
-        <th>Customer ID</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Phone Number</th>
-        <th>Email</th>
-        <th>Start Date</th>
-        <th>Expire Date</th>
-      </tr>
-      {filterrefund &&
-        filterrefund.map((refund, key) => {
-          return (
-            <>
-              <tr>
-                <td>{refund.ticketID}</td>
-                <td>{refund.ticketName}</td>
-                <td>{refund.customerID}</td>
-                <td>{refund.Fname}</td>
-                <td>{refund.Lname}</td>
-                <td>{refund.phoneNumber}</td>
-                <td>{refund.Email}</td>
-                <td>{new Date(refund.startDate).toISOString().split('T')[0]}</td>
-                <td>{new Date(refund.expiryDate).toISOString().split('T')[0]}</td>
-
-              </tr>
-            </>
-          );
-        })}
-
-        </table>
 
     </>
     

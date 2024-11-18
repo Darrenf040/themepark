@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "react-calendar": "^5.1.0",
+    "react-dropzone": "^14.3.5",
     "react-select": "^5.8.3"
   }
 }

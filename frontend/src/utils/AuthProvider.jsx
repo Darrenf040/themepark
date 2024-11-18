@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     // Check the token validity on component mount (when the page is refreshed)
     axios
-      .get("https://themepark-backend.onrender.com/admin/verify", {
+      .get("https://gleaming-lokum-158537.netlify.app/admin/verify", {
         withCredentials: true, // Ensure cookies are sent along with the request
       })
       .then((res) => {

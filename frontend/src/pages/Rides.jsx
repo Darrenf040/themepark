@@ -11,7 +11,7 @@ export default function Rides() {
 
   const ridesList = () => {
     axios
-      .get("https://themepark-backend.onrender.com/rides/read")
+      .get("https://gleaming-lokum-158537.netlify.app/rides/read")
       .then((res) => {
         setRides(
           res.data.result.filter((ride) => {

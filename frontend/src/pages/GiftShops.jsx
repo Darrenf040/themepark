@@ -9,7 +9,7 @@ export default function GiftShops() {
   const [shopList, setShopList] = useState([]);
   const getShops = () => {
     axios
-      .get("https://themepark-backend.onrender.com/shops/readGiftShops")
+      .get("https://gleaming-lokum-158537.netlify.app/shops/readGiftShops")
       .then((res) => setShopList(res.data.result))
       .catch((err) => console.error(err));
   };
