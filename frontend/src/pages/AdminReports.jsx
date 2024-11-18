@@ -20,7 +20,7 @@ const  postmMintenance =  (e) => {
    setRideMaint([{...rideMaint, maintenanceOpenDate: new Date(filterDate.startDate).toISOString().split('T')[0], // YYYY-MM-DD
     maintenanceCloseDate: new Date(filterDate.endDate).toISOString().split('T')[0],     // YYYY-MM-DD
   }]);
-  axios.post("https://themepark-backend.onrender.com/reports/maintenance", filterDate)
+  axios.post("http://localhost:3000/reports/maintenance", filterDate)
   .then(res =>{
     setRideMaint(res.data.Result)
   })
@@ -32,14 +32,14 @@ const  postmMintenance =  (e) => {
 const  transaction =  (e) => {
 
   e.preventDefault();
-  axios.post("https://themepark-backend.onrender.com/reports/shop-transactions",shopData)
+  axios.post("http://localhost:3000/reports/shop-transactions",shopData)
   .then(res => setFilterShops(res.data.Result))
   .catch(err => alert(err))
 }
 const  ticketSales =  (e) => {
 
   e.preventDefault();
-  axios.post("https://themepark-backend.onrender.com/reports/ticket-sales",ticketDate)
+  axios.post("http://localhost:3000/reports/ticket-sales",ticketDate)
   .then(res => setFiltertickets(res.data.Result))
   .catch(err => alert(err))
 }
@@ -47,7 +47,7 @@ const  ticketSales =  (e) => {
 const  refund =  (e) => {
 
   e.preventDefault();
-  axios.post("https://themepark-backend.onrender.com/reports/refund-info", refundDate)
+  axios.post("http://localhost:3000/reports/refund-info", refundDate)
   .then(res =>setFilterrefund(res.data.Result))
   .catch(err => alert(err))
   console.log(filterrefund)

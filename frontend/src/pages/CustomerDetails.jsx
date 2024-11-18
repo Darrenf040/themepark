@@ -14,7 +14,7 @@ const CustomerDetails = () => {
   useEffect(() => {
     // Fetch customer details on component mount
     axios
-      .get(`https://themepark-backend.onrender.com/customers/read/${customerID}`)
+      .get(`http://localhost:3000/customers/read/${customerID}`)
       .then((response) => {
         setCustomerData(response.data);
         setFormValues(response.data); // Initialize form values
@@ -25,7 +25,7 @@ const CustomerDetails = () => {
 
     // Fetch customer tickets
     axios
-      .get(`https://themepark-backend.onrender.com/customers/tickets/${customerID}`)
+      .get(`http://localhost:3000/customers/tickets/${customerID}`)
       .then((response) => {
         setTickets(response.data);
       })
@@ -47,7 +47,7 @@ const CustomerDetails = () => {
     };
 
     axios
-      .put("https://themepark-backend.onrender.com/customers/update", dataToUpdate)
+      .put("http://localhost:3000/customers/update", dataToUpdate)
       .then((response) => {
         setCustomerData(formValues);
         setIsEditing(false);

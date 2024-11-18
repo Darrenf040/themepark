@@ -46,7 +46,7 @@ const [isEditMode, setIsEditMode] = useState(false);
     console.log(newParkStatus.weatherType);
     try {
       const response = await axios.post(
-        "https://themepark-backend.onrender.com/parkstatus/create",
+        "http://localhost:3000/parkstatus/create",
         newParkStatus
       );
       fetchParkStatus();
@@ -61,7 +61,7 @@ const [isEditMode, setIsEditMode] = useState(false);
 
   const fetchParkStatus = async () => {
     try {
-        const response = await axios.get("https://themepark-backend.onrender.com/parkstatus/read");
+        const response = await axios.get("http://localhost:3000/parkstatus/read");
         setParkStatusList(response.data.result);
     } catch (error) {
         console.error("Error fetching shops:", error);
@@ -70,7 +70,7 @@ const [isEditMode, setIsEditMode] = useState(false);
 
   const getParkStatus = () => {
     axios
-      .get("https://themepark-backend.onrender.com/parkstatus/read")
+      .get("http://localhost:3000/parkstatus/read")
       .then((res) => setParkStatusList(res.data.result))
       .catch((err) => console.error(err));
   };
@@ -78,7 +78,7 @@ const [isEditMode, setIsEditMode] = useState(false);
   const getParkStatusData = (parkStatusID) => {
     axios
       .get(
-        `https://themepark-backend.onrender.com/parkstatus/read/${parkStatusID}`
+        `http://localhost:3000/parkstatus/read/${parkStatusID}`
       )
       .then((res) => {
         setEditRow(res.data.result);
@@ -177,7 +177,7 @@ const [isEditMode, setIsEditMode] = useState(false);
     try{
     axios
       .put(
-        `https://themepark-backend.onrender.com/parkstatus/${formData.parkStatusID}`,
+        `http://localhost:3000/parkstatus/${formData.parkStatusID}`,
         formData
       )
       fetchParkStatus();

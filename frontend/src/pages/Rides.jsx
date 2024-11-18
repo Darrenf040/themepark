@@ -11,7 +11,7 @@ export default function Rides() {
 
   const ridesList = () => {
     axios
-      .get("https://themepark-backend.onrender.com/rides/read")
+      .get("http://localhost:3000/rides/read")
       .then((res) => {
         setRides(
           res.data.result.filter((ride) => {

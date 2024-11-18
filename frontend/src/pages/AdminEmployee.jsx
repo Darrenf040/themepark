@@ -32,7 +32,7 @@ export default function AdminEmployee() {
     e.preventDefault();
     try {
       const request = await axios.post(
-        `https://themepark-backend.onrender.com/employee/create`,
+        `http://localhost:3000/employee/create`,
         values
       );
       alert(request.data);
@@ -44,7 +44,7 @@ export default function AdminEmployee() {
 
   const deleteRow = (idVal) => {
     axios
-      .delete(`https://themepark-backend.onrender.com/employee/delete/${idVal}`)
+      .delete(`http://localhost:3000/employee/delete/${idVal}`)
       .then((res) => {
         alert(res.data);
         setEmployeeList(
@@ -60,7 +60,7 @@ export default function AdminEmployee() {
 
   const getEmployees = async () => {
     await axios
-      .get(`https://themepark-backend.onrender.com/employee/read`)
+      .get(`http://localhost:3000/employee/read`)
       .then((res) => setEmployeeList(res.data.result))
       .catch((err) => alert(err + " when retrieving employees"));
   };
@@ -72,7 +72,7 @@ export default function AdminEmployee() {
 
   const getEmployeeData = (ssn) => {
     axios
-      .get(`https://themepark-backend.onrender.com/employee/read/${ssn}`)
+      .get(`http://localhost:3000/employee/read/${ssn}`)
       .then((res) => {
         setEmployeeData({ ...employeeData, ...res.data.result });
         setValues({ ...values, ...res.data.result[0] });
@@ -85,7 +85,7 @@ export default function AdminEmployee() {
   const handleUpdate = (e) => {
     e.preventDefault();
     axios
-      .put(`https://themepark-backend.onrender.com/employee/update`, values)
+      .put(`http://localhost:3000/employee/update`, values)
       .then((res) => alert(res.data))
       .catch((err) => alert(err));
     setDeleteState(deleteState == true ? false : true);

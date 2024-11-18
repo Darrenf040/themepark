@@ -54,7 +54,7 @@ const TicketForm = () => {
     // Example of sending data to the server (you can replace the URL)
     axios
       .post(
-        "https://themepark-backend.onrender.com/tickets/purchase-tickets",
+        "http://localhost:3000/tickets/purchase-tickets",
         payload
       )
       .then((response) => {

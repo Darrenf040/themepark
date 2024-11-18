@@ -25,7 +25,7 @@ const Dashboard = () => {
   const fetchTopRides = async () => {
     try {
       const response = await axios.get(
-        "https://themepark-backend.onrender.com/rides/top-rides"
+        "http://localhost:3000/rides/top-rides"
       );
       setTopRides(response.data.result);
     } catch (error) {
@@ -37,7 +37,7 @@ const Dashboard = () => {
   const fetchUpcomingEvents = async () => {
     try {
       const response = await axios.get(
-        "https://themepark-backend.onrender.com/events/upcoming-events"
+        "http://localhost:3000/events/upcoming-events"
       );
       setUpcomingEvents(response.data.result);
     } catch (error) {
@@ -49,7 +49,7 @@ const Dashboard = () => {
   const fetchUpcomingMaintenance = async () => {
     try {
       const response = await axios.get(
-        "https://themepark-backend.onrender.com/events/upcoming-maintenance"
+        "http://localhost:3000/events/upcoming-maintenance"
       );
       setUpcomingMaintenance(response.data.result);
     } catch (error) {
@@ -60,7 +60,7 @@ const Dashboard = () => {
   const fetchEvents = async () => {
     try {
       const response = await axios.get(
-        "https://themepark-backend.onrender.com/events/read"
+        "http://localhost:3000/events/read"
       );
       setEvents(response.data.result);
     } catch (error) {
@@ -155,7 +155,7 @@ const Dashboard = () => {
     try {
       console.log(editingMaint.maintenanceOpenDate);
       console.log(editingMaint.maintenanceStatus);
-      axios.put(`https://themepark-backend.onrender.com/maintenance/${editingMaint.maintenanceID}`, editingMaint);
+      axios.put(`http://localhost:3000/maintenance/${editingMaint.maintenanceID}`, editingMaint);
       fetchUpcomingMaintenance();
       setEditModalOpen(false);
     } catch (error) {
