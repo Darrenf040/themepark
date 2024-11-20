@@ -299,23 +299,28 @@ export default function AdminReports() {
                 </tr>
               </thead>
               <tbody>
-                {filterrefund.map((refund, key) => (
-                  <tr key={key}>
-                    <td>{refund.ticketID}</td>
-                    <td>{refund.ticketName}</td>
-                    <td>{refund.customerID}</td>
-                    <td>{refund.Fname}</td>
-                    <td>{refund.Lname}</td>
-                    <td>{refund.phoneNumber}</td>
-                    <td>{refund.Email}</td>
-                    <td>
-                      {new Date(refund.startDate).toISOString().split("T")[0]}
-                    </td>
-                    <td>
-                      {new Date(refund.expiryDate).toISOString().split("T")[0]}
-                    </td>
-                  </tr>
-                ))}
+                {filterrefund &&
+                  filterrefund.map((refund, key) => (
+                    <tr key={key}>
+                      <td>{refund.ticketID}</td>
+                      <td>{refund.ticketName}</td>
+                      <td>{refund.customerID}</td>
+                      <td>{refund.Fname}</td>
+                      <td>{refund.Lname}</td>
+                      <td>{refund.phoneNumber}</td>
+                      <td>{refund.Email}</td>
+                      <td>
+                        {new Date(refund.startDate).toISOString().split("T")[0]}
+                      </td>
+                      <td>
+                        {
+                          new Date(refund.expiryDate)
+                            .toISOString()
+                            .split("T")[0]
+                        }
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
               <tfoot>
                 <tr>
