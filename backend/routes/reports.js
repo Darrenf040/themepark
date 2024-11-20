@@ -98,7 +98,7 @@ JOIN
 ON 
     t.ticketType = tt.ticketType
 WHERE 
-t.ticketType = 5 and 4
+t.ticketType = IN (4, 5)
 AND t.startDate >= ?
 AND t.expiryDate <= ?;
      `;
