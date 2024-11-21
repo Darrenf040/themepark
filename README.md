@@ -2,7 +2,7 @@
 [Web App Link](https://gleaming-lokum-158537.netlify.app)
 ## Project description 
 
-Our themepark management web app has 3 different roles for users to manage and be apart of our themepark 
+Our themepark management web app has 3 different roles for users to manage and be apart of our themepark. The goal of this project is to allow users a user interface that allows them to interact with our database.
 
 ## Customers
 - Customers can view details about the park, buy tickets for their next visit, and register/login an account with us to manage their tickets. 
