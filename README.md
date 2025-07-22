@@ -1,4 +1,6 @@
 # Themepark Management 
+Note: Uses Netlify’s free-tier hosting may take time to load initially.
+
 [Web App Link](https://gleaming-lokum-158537.netlify.app)
 ## Project description 
 
